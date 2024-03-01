@@ -32,14 +32,20 @@ public static class ArraysTester {
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
-    private static double[] MultiplesOf(double number, int length)
+    private static double[] MultiplesOf(double number, int length) //add double[] before the name of the function to tell it that it requires a return
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        //Intialize the array of doubles w/ a size of "length" - Empty array(box)
+        double[] multiples = new double[length];
 
-        return new double[0]; // replace this return statement with your own
+        //Create a for loop that populates the array with multiples of the starting "number" 
+        for (int i = 1; i <= length; i++)  //This starts the counter - tcounts to "length"
+        {
+            //Calculate the multiple for the current position
+            //Arrays are 0-indexed but we are starting with multiples from 1, so we use 'i - 1' as the index (to pick the right spot in the index)
+            multiples[i - 1] = number * i; //multiply "number" * 1, then "number" * 2 etc. (ie: 7*1, 7*2..to 5 times)
+        }
+
+        return multiples; // return the filled array
     }
     
     /// <summary>
@@ -52,10 +58,23 @@ public static class ArraysTester {
     /// </summary>
     private static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Calculate the 'effective rotation' 
+        int effectiveRotation = amount % data.Count; //data.Count is the total number of the list / effectiveRotation is "amount" % total number
+        if (effectiveRotation == 0) return; // No rotation needed if answer is 0
+
+        // Calculate the slicing point (total number - )
+        int slicingPoint = data.Count - effectiveRotation; 
+
+        // Get the two slices of the list
+        List<int> firstSlice = data.GetRange(slicingPoint, effectiveRotation); //gets from slicing point to rotation
+        List<int> secondSlice = data.GetRange(0, slicingPoint);  //gets from 0 to slicing point
+
+        // Clear the original list and reassemble in the new order
+        data.Clear();
+        data.AddRange(firstSlice);
+        data.AddRange(secondSlice);
 
     }
 }
+
+//uses GetRange and AddRange to create two lists and then recombine
