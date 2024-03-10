@@ -15,7 +15,9 @@
         // Console.WriteLine(players);    // This can be un-commented out for debug help
         while (players.Length > 0)
             players.GetNextPerson();
-        // Defect(s) Found: 
+        // Defect(s) Found: The turns for each person enqueueing aren't being counted correctly
+
+
 
         Console.WriteLine("---------");
 
@@ -38,7 +40,7 @@
         while (players.Length > 0)
             players.GetNextPerson();
 
-        // Defect(s) Found: 
+        // Defect(s) Found: The turns for each person enqueueing aren't being counted correctly
 
         Console.WriteLine("---------");
 
@@ -56,7 +58,7 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: The turns for each person enqueueing aren't being counted correctly and infinite turns are off as well
 
         Console.WriteLine("---------");
 
@@ -73,7 +75,7 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: The turns for each person enqueueing aren't being counted correctly and infinite turns are off as well
 
         Console.WriteLine("---------");
 
@@ -83,6 +85,6 @@
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
         players.GetNextPerson();
-        // Defect(s) Found:
+        // Defect(s) Found: This one is working correctly because the No one in the queues is present.
     }
 }
