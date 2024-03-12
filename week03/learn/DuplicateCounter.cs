@@ -24,7 +24,35 @@
 
     private static int CountDuplicates(int[] data)
     {
-        // Add code here.
-        return 0;
+        // A HashSet is a collection that contains no duplicate elements. 
+        // Here, it's used to track unique elements as we iterate through the data array.
+        var unique = new HashSet<int>(); 
+        
+        var duplicates = 0; //initilize a variable called duplicates 
+
+    // Begin iterating over each element in the provided array, 'data'.
+        foreach (var x in data)
+        {   //Check if the current element, 'x', is already in the HashSet 'unique'.
+            if (unique.Contains(x)) // If 'x' is found in 'unique', it means 'x' is a duplicate.
+                duplicates++;// Therefore, increment the 'duplicates' counter by 1.
+            else 
+                unique.Add(x);   // If 'x' is not found in 'unique', it means it's the first time we're seeing this value.
+                                // Add 'x' to 'unique' to track that we've now encountered this value.
+
+        }
+        return duplicates;  // After processing all elements in 'data', return the total count of duplicates found.
+        
+        }
+
+    /// <summary>
+    /// Add everything in the data to the set. Duplicates will be automatically ignored.
+    /// Subtract the length of the set from the length of the data.
+    /// </summary>
+    /// 
+
+    private static int CountDuplicatesAlternate(int[] data)
+    {
+        var unique = new HashSet<int>(data);
+        return data.Length - unique.Count;
     }
 }

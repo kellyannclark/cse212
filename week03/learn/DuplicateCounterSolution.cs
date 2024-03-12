@@ -52,6 +52,6 @@
     private static int CountDuplicatesAlternate(int[] data)
     {
         var unique = new HashSet<int>(data);
-        return data.Length - unique.Count;
-    }
-}
+        return data.Length - unique.Count;  //data.Length gives the total number of elements in the original array, including duplicates.
+    }                                         //unique.Count gives the number of unique elements in data, as the HashSet does not allow duplicates.
+}   //In other words, the original length subtract the new length
