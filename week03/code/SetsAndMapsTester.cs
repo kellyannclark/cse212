@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.Json;
 
 public static class SetsAndMapsTester {
@@ -108,9 +109,27 @@ public static class SetsAndMapsTester {
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     private static void DisplayPairs(string[] words) {
-        // To display the pair correctly use something like:
-        // Console.WriteLine($"{word} & {pair}");
-        // Each pair of words should displayed on its own line.
+        // Initialize a HashSet to store the words we've seen so far.
+        HashSet<string> seenWords = new HashSet<string>();
+
+        // Loop through each word in the provided array.    
+        foreach (string word in words) {
+           
+            // !!!!!To find a matching pair, the reverse of the current word needs to match a previously encountered word.!!!!!
+            // So, we convert the current word into a char array to reverse it.     
+            char[] charArray = word.ToCharArray();
+            // Reverse the char array to get the reverse of the current word.
+            Array.Reverse(charArray);
+            // Convert the reversed char array back into a string.
+            string reversedWord = new string(charArray);
+
+            //check to see if the reversed word is already in the set, print it 
+            if(seenWords.Contains(reversedWord)) {
+                Console.WriteLine($"{reversedWord} & {word}");
+            } else { //else, add the word to the hashset
+                seenWords.Add(word);
+            }
+        }
     }
 
     /// <summary>
@@ -131,9 +150,15 @@ public static class SetsAndMapsTester {
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
-        }
+            var degree = fields[3];// This extracts degree info from the 4th column
 
+            //update the degree dictionary
+            if (degrees.ContainsKey(degree)) {
+                degrees[degree] += 1; //Increment count for existing degree
+            } else {
+                degrees.Add(degree, 1); //Add new degree with count 1 
+            }
+        }
         return degrees;
     }
 
@@ -157,9 +182,46 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+    // Normalize words by removing spaces and converting to lowercase to ensure that the comparison is case-insensitive
+    // and unaffected by spaces. This is crucial because anagrams disregard letter case and spaces.
+    var normalizedWord1 = word1.Replace(" ", "").ToLower();
+    var normalizedWord2 = word2.Replace(" ", "").ToLower();
+
+    // If the lengths of the normalized words are different, they cannot be anagrams of each other
+    // because anagrams must use the same number of the same letters.
+    if (normalizedWord1.Length != normalizedWord2.Length) {
+        return false; // Early return to avoid unnecessary computation if the lengths differ.
     }
+
+    // Define a local function to count the occurrences of each letter in a given word.
+    // This function creates and returns a dictionary where each key is a letter from the word,
+    // and the corresponding value is the number of times that letter appears in the word.
+    Dictionary<char, int> CountLetters(string word) {
+        var letterCounts = new Dictionary<char, int>();
+        foreach (char letter in word) {
+            if (letterCounts.ContainsKey(letter)) {
+                // If the letter is already in the dictionary, increment its count.
+                letterCounts[letter]++;
+            } else {
+                // If the letter is not yet in the dictionary, add it with a count of 1.
+                letterCounts.Add(letter, 1);
+            }
+        }
+        return letterCounts; // Return the populated dictionary of letter counts.
+    }
+
+    // Use the CountLetters function to count letter occurrences in both normalized words.
+    var word1LetterCounts = CountLetters(normalizedWord1);
+    var word2LetterCounts = CountLetters(normalizedWord2);
+
+    // Compare the two dictionaries (word1LetterCounts and word2LetterCounts) for equality.
+    // They are considered equal if they have the same number of keys (unique letters)
+    // and corresponding values (counts of each letter) match for all keys.
+    // The Except method is used to find differences between the dictionaries; if there are no differences,
+    // it means the dictionaries (and therefore the words) are anagrams of each other.
+    return word1LetterCounts.Count == word2LetterCounts.Count && !word1LetterCounts.Except(word2LetterCounts).Any();
+}
+
 
     /// <summary>
     /// Sets up the maze dictionary for problem 4
@@ -206,6 +268,8 @@ public static class SetsAndMapsTester {
         return map;
     }
 
+    
+
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
     /// United States Geological Service (USGS) consisting of earthquake data.
@@ -231,9 +295,20 @@ public static class SetsAndMapsTester {
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
+
+            // Check if featureCollection is not null to avoid potential NullReferenceException.
+        if (featureCollection?.Features != null) {
+        // Iterate over each feature in the featureCollection to access the earthquake data.
+        foreach (var feature in featureCollection.Features) {
+            // For each earthquake, print out its location (place) and magnitude.
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+        }
         // TODO:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
     }
+
+    }
 }
+
